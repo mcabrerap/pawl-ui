@@ -1,0 +1,5 @@
+@use './variables' as *;
+
+$primary: $purple;
+
+@import '~bulma';
