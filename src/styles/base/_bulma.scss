@@ -1,6 +1,6 @@
 @use './variables' as *;
 
-$primary: $primaryColor;
+$primary: $color-primary;
 $family-sans-serif: $roboto;
 
 @import '~bulma';

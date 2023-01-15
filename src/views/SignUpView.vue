@@ -6,9 +6,9 @@
       </div>
     </div>
     <div class="hero-body">
-      <div class="login">
-        <div class="login__header">
-          <h2 class="login__title">Create your account</h2>
+      <div class="signup">
+        <div class="signup__header">
+          <h2 class="signup__title">Create your account</h2>
           <p class="has-text-grey-light">Enter the fields below to get started</p>
         </div>
         <div class="field mb-6">
@@ -34,8 +34,8 @@
             <button class="button is-primary is-large is-fullwidth is-rounded">Sign up</button>
           </div>
         </div>
-        <div class="login__signup">
-          <p>Already have an account? <span>Log in</span></p>
+        <div class="signup__signup">
+          <p>Already have an account? <span><router-link to="/login">Log in</router-link></span></p>
         </div>
       </div>
     </div>

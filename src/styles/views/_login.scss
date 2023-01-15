@@ -8,7 +8,10 @@
     text-align: center;
 
     span {
-      color: $primaryColor;
+      a {
+        color: $color-primary;
+        text-decoration: none;
+      }
     }
   }
 

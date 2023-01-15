@@ -12,7 +12,7 @@
           <p class="has-text-grey-light">Please login to your account</p>
         </div>
         <div class="field mb-6">
-          <label class="label is-large">email</label>
+          <label class="label is-large">Email</label>
           <div class="control">
             <input class="input is-large" type="email" placeholder="Email">
           </div>
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="login__signup">
-          <p>Don't have an account? <span>Sign up</span></p>
+          <p>Don't have an account? <span><router-link to="/signup">Sign up</router-link></span></p>
         </div>
       </div>
     </div>
