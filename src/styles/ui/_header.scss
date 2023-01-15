@@ -1,0 +1,19 @@
+@use '../base/variables' as *;
+@use '../base/bulma' as *;
+
+.header {
+  text-align: center;
+
+  @include from($desktop) {
+
+    margin-left: 2rem;
+    text-align: left;
+  }
+
+  &__title {
+
+    span {
+      color: $primaryColor;
+    }
+  }
+}
