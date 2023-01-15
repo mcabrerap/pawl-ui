@@ -1,17 +1,26 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import LoginView from '../views/LoginView.vue'
-import SignUp from '../views/SignUp.vue'
+import SignUpView from '../views/SignUpView.vue'
+import NotFoundView from '../views/NotFoundView.vue'
 
 const routes = [
+    {
+        path: '/',
+        redirect: '/login'
+    },
     {
         path: '/login',
         name: 'login',
         component: LoginView
     },
     {
-        path: '/',
+        path: '/signup',
         name: 'signup',
-        component: SignUp
+        component: SignUpView
+    },
+    {
+        path: '/:notFound(.*)',
+        component: NotFoundView
     }
 ]
 
