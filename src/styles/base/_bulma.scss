@@ -1,6 +1,10 @@
 @use './variables' as *;
 
 $primary: $color-primary;
+$white: $color-white;
+$danger: $color-danger;
+$black: $color-black;
+
 $family-sans-serif: $roboto;
 
 @import '~bulma';
