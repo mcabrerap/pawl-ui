@@ -19,6 +19,7 @@
                 type="text"
                 placeholder="Full name"
                 maxlength="50"
+                autocomplete="name"
                 v-model.trim="fullName">
           </div>
         </div>
@@ -30,6 +31,7 @@
                 type="email"
                 placeholder="Email"
                 maxlength="50"
+                autocomplete="username"
                 v-model.trim="email">
           </div>
         </div>
@@ -41,6 +43,7 @@
                 type="password"
                 placeholder="Password"
                 maxlength="15"
+                autocomplete="new-password"
                 v-model.trim="password">
           </div>
         </div>
@@ -55,35 +58,34 @@
         <div class="signup__signup">
           <p>Already have an account? <span><router-link to="/login">Log in</router-link></span></p>
         </div>
-        <div v-if="test">
-          ENTRE!!!!!!!!!!
-        </div>
       </form>
     </div>
   </section>
 </template>
 
 <script setup>
-import {ref, computed} from 'vue'
+import {ref} from 'vue'
 import {useStore} from 'vuex'
-
+import {useRouter} from 'vue-router'
 
 const store = useStore()
+const router = useRouter()
 
 const fullName = ref('')
 const email = ref('')
 const password = ref('')
 const submitFormErrors = ref([])
 
-const test = computed(() => {
-  return store.state.signUpUser.email
-})
-
 const submitForm = () => {
 
   if (formIsValid()) {
     store.dispatch('signUp', {fullName: fullName.value, email: email.value, password: password.value})
   }
+
+  const isUserSignedUp = store.getters.getSignUpUser.successfulSignUp
+
+  if (isUserSignedUp) router.push('/signup-success')
+
 }
 
 const formIsValid = () => {

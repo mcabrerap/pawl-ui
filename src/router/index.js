@@ -2,6 +2,7 @@ import {createRouter, createWebHashHistory} from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import SignUpView from '../views/SignUpView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
+import SignUpSuccessView from '../views/SignUpSuccessView.vue'
 
 const routes = [
     {
@@ -17,6 +18,11 @@ const routes = [
         path: '/signup',
         name: 'signup',
         component: SignUpView
+    },
+    {
+        path: '/signup-success',
+        name: 'signup-success',
+        component: SignUpSuccessView
     },
     {
         path: '/:notFound(.*)',

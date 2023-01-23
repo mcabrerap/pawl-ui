@@ -6,6 +6,7 @@ export default createStore({
         signUpUser: {
             fullName: null,
             email: null,
+            successfulSignUp: false
         }
     },
     getters: {
@@ -32,7 +33,8 @@ export default createStore({
 
                 context.commit('setSignUpUserData', {
                     fullName: payload.fullName,
-                    email: payload.email
+                    email: payload.email,
+                    successfulSignUp: true
                 })
             }
         }
