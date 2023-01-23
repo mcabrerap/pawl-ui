@@ -3,26 +3,21 @@ import http from '../http/axios.http.js'
 
 export default createStore({
     state: {
-        signUpUser: {
-            fullName: null,
-            email: null,
-            successfulSignUp: false
-        }
+        isUserSignUp: false
     },
     getters: {
-        getSignUpUser: state => state.signUpUser
+        getIsUserSignUp: state => state.isUserSignUp
     },
     mutations: {
 
-        setSignUpUserData(state, payload) {
-            state.signUpUser = payload
+        setIsUserSignUp(state, payload) {
+            state.isUserSignUp = payload.isUserSignUp
         }
 
     },
     actions: {
         async signUp(context, payload) {
 
-            console.log('signUp action', payload)
             const signUpResponse = await http.post('/pawl/v1/api/signup', {
                 full_name: payload.fullName,
                 email: payload.email,
@@ -30,11 +25,9 @@ export default createStore({
             })
 
             if (signUpResponse.status === 201) {
-
-                context.commit('setSignUpUserData', {
-                    fullName: payload.fullName,
-                    email: payload.email,
-                    successfulSignUp: true
+                console.log('signUpResponse', signUpResponse)
+                context.commit('setIsUserSignUp', {
+                    isUserSignUp: true
                 })
             }
         }

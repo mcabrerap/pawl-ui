@@ -50,6 +50,9 @@
         <div class="signup__validation-error" v-if="formIsValid">
           <p v-for="error in submitFormErrors" :key="error">{{ error }}</p>
         </div>
+        <div class="signup__validation-error" v-if="errorOnSubmit">
+          <p>{{ signupError }}</p>
+        </div>
         <div class="field mb-6">
           <div class="control">
             <button class="button is-primary is-large is-fullwidth is-rounded">Sign up</button>
@@ -64,7 +67,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 
@@ -75,17 +78,40 @@ const fullName = ref('')
 const email = ref('')
 const password = ref('')
 const submitFormErrors = ref([])
+const signupError = ref('')
 
-const submitForm = () => {
+const errorOnSubmit = computed(() => signupError.value !== '')
 
-  if (formIsValid()) {
-    store.dispatch('signUp', {fullName: fullName.value, email: email.value, password: password.value})
+
+
+const submitForm = async () => {
+
+  try {
+
+    if (formIsValid()) {
+      await store.dispatch('signUp', {fullName: fullName.value, email: email.value, password: password.value})
+    }
+
+    if (store.getters.getIsUserSignUp) {
+
+      store.commit('setIsUserSignUp', false)
+      await router.push('/signup-success')
+    }
+
+  } catch (error) {
+
+    const errorMessage = error.response.data.errorMessage
+
+    if (errorMessage.includes('duplicate key error')) {
+
+      signupError.value = 'Email already exists'
+
+    } else {
+
+      signupError.value = `Something went wrong, please try again: ${errorMessage}`
+
+    }
   }
-
-  const isUserSignedUp = store.getters.getSignUpUser.successfulSignUp
-
-  if (isUserSignedUp) router.push('/signup-success')
-
 }
 
 const formIsValid = () => {
