@@ -82,8 +82,6 @@ const signupError = ref('')
 
 const errorOnSubmit = computed(() => signupError.value !== '')
 
-
-
 const submitForm = async () => {
 
   try {

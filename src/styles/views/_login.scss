@@ -19,4 +19,11 @@
     padding-bottom: 4rem;
   }
 
+  &__validation-error {
+    color: $color-danger;
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
 }
