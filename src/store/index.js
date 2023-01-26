@@ -67,11 +67,36 @@ export default createStore({
                         accessToken: logInResponse.data.accessToken
                     }
                 })
+
+                context.commit('setIsUserLoggedIn', {
+                    isUserLoggedIn: true
+                })
+
+                localStorage.setItem('user', JSON.stringify(logInResponse.data.user))
+                localStorage.setItem('accessToken', logInResponse.data.accessToken)
+            }
+        },
+        autoLogIn(context) {
+            const user = JSON.parse(localStorage.getItem('user'))
+            const accessToken = localStorage.getItem('accessToken')
+
+            if (user && accessToken) {
+                context.commit('setUser', {
+                    user: {
+                        id: user._id,
+                        email: user.email,
+                        full_name: user.full_name,
+                        verified: user.verified,
+                        accessToken: accessToken
+                    }
+                })
+
                 context.commit('setIsUserLoggedIn', {
                     isUserLoggedIn: true
                 })
             }
         }
+
     },
     modules: {}
 })
