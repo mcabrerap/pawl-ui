@@ -14,7 +14,10 @@ const routes = [
     {
         path: '/login',
         name: 'login',
-        component: LoginView
+        component: LoginView,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: '/signup',
@@ -29,7 +32,10 @@ const routes = [
             path: 'chart',
             name: 'chart',
             component: ChartView
-        }]
+        }],
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/signup-success',
@@ -45,6 +51,21 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth) {
+        if (localStorage.getItem('accessToken')) {
+            next()
+        } else {
+            next('/login')
+        }
+    } else if (to.name === 'login' && localStorage.getItem('accessToken')) {
+        next('/dashboard')
+    } else {
+        next()
+    }
+
 })
 
 export default router

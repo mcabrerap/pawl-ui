@@ -95,6 +95,24 @@ export default createStore({
                     isUserLoggedIn: true
                 })
             }
+        },
+        logOut(context) {
+            localStorage.removeItem('user')
+            localStorage.removeItem('accessToken')
+
+            context.commit('setUser', {
+                user: {
+                    id: '',
+                    email: '',
+                    full_name: '',
+                    verified: false,
+                    accessToken: ''
+                }
+            })
+
+            context.commit('setIsUserLoggedIn', {
+                isUserLoggedIn: false
+            })
         }
 
     },

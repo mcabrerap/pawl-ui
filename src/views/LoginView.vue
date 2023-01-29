@@ -80,7 +80,7 @@ const login = async () => {
         password: password.value
       })
 
-      await router.push('/signup-success')
+      await router.push('/dashboard')
     }
   } catch (error) {
     loginError.value = 'Invalid email or password, please try again'

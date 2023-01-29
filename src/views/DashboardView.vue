@@ -25,7 +25,7 @@
               Actions
             </p>
             <ul class="menu-list">
-              <li><a>Logout</a></li>
+              <li><a @click="logOut">Logout</a></li>
             </ul>
           </aside>
         </div>
@@ -36,3 +36,20 @@
    </div>
   </section>
 </template>
+
+<script setup>
+
+import {useStore} from 'vuex'
+import {useRouter} from 'vue-router'
+
+const store = useStore()
+const router = useRouter()
+
+const logOut = () => {
+  store.dispatch('logOut')
+  router.push('/login')
+}
+
+
+
+</script>
