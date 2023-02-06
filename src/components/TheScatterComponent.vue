@@ -1,46 +1,29 @@
 <template>
   <div style="">
-    <Scatter :data="data" :options="options"/>
+    <Scatter :data="data" :options="options" v-if="loaded"/>
   </div>
 </template>
 
 <script setup>
 
-import {ref} from 'vue'
+import {ref, computed, onMounted} from 'vue'
 import {Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Legend} from 'chart.js'
 import {Scatter} from 'vue-chartjs'
+import {useStore} from 'vuex'
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
+
+const store = useStore()
+const loaded = ref(false)
 
 const data = ref({
   datasets: [
     {
-      label: 'Scatter Dataset 1',
+      label: 'Potentiostat Curve',
       fill: false,
-      borderColor: '#f87979',
-      backgroundColor: '#f87979',
-      data: [
-        {
-          x: -2,
-          y: 4
-        },
-        {
-          x: -1,
-          y: 1
-        },
-        {
-          x: 0,
-          y: 0
-        },
-        {
-          x: 1,
-          y: 1
-        },
-        {
-          x: 2,
-          y: 4
-        }
-      ],
+      borderColor: '#e49e00',
+      backgroundColor: '#e49e00',
+      data: [],
     }
   ]
 })
@@ -52,4 +35,12 @@ const options = ref({
 
 })
 
+onMounted(() => {
+
+  loaded.value = false
+  const measurementData = computed(() => store.state.measurementData)
+  data.value.datasets[0].data = measurementData.value
+  loaded.value = true
+
+})
 </script>

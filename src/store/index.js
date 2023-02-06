@@ -11,12 +11,16 @@ export default createStore({
             verified: false,
             accessToken: ''
         },
-        isUserLoggedIn: false
+        isUserLoggedIn: false,
+        measurementData: null,
+        loadedChart: false
     },
     getters: {
         getIsUserSignUp: state => state.isUserSignUp,
         getUser: state => state.user,
-        getIsUserLoggedIn: state => state.isUserLoggedIn
+        getIsUserLoggedIn: state => state.isUserLoggedIn,
+        getMeasurementData: state => state.measurementData,
+        getLoadedChart: state => state.loadedChart
     },
     mutations: {
 
@@ -31,6 +35,12 @@ export default createStore({
         },
         setAuthError(state, payload) {
             state.authError = payload.authError
+        },
+        setMeasurementData(state, payload) {
+            state.measurementData = payload.measurementData
+        },
+        setLoadedChart(state, payload) {
+            state.loadedChart = payload.loadedChart
         }
 
     },
@@ -113,6 +123,30 @@ export default createStore({
             context.commit('setIsUserLoggedIn', {
                 isUserLoggedIn: false
             })
+        },
+        async startMeasurement(context, payload) {
+            await http.put(`/pawl/v1/api/command/${payload.deviceId}`, {
+                name: 'STARTED_MEASUREMENT',
+                identifier: payload.identifier
+            })
+
+            let commandResponse = await http.get(`/pawl/v1/api/command/${payload.deviceId}`)
+
+            while (commandResponse.data.name !== 'STOPPED_MEASUREMENT') {
+                await new Promise(resolve => setTimeout(resolve, 1000))
+                commandResponse = await http.get(`/pawl/v1/api/command/${payload.deviceId}`)
+            }
+
+            const responseData = await http.get(`/pawl/v1/api/data/${payload.identifier}`)
+
+            await context.commit('setMeasurementData', {
+                measurementData: responseData.data
+            })
+
+            await context.commit('setLoadedChart', {
+                loadedChart: true
+            })
+
         }
 
     },
