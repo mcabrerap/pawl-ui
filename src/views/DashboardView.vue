@@ -1,6 +1,6 @@
 <template>
   <section>
-   <div class="container is-fluid">
+    <div class="container is-fluid">
       <div class="columns pt-6 dashboard">
         <div class="column is-one-fifth dashboard__menu">
           <aside class="menu">
@@ -30,15 +30,34 @@
           </aside>
         </div>
         <div class="column dashboard__content">
+
+          <div class="device-container" v-if="currentRoute">
+            <h1 class="has-text-centered pb-6">Registered Devices</h1>
+            <div class="columns">
+              <div class="column" v-for="device in registeredDevices" :key="device._id">
+                <div class="registered-devices__item">
+                  <div class="registered-devices__device-id pb-6">
+                    <p class="title has-text-centered">Device</p>
+                    <p class="subtitle has-text-centered">{{ device.deviceId }}</p>
+                  </div>
+                  <div class="registered-devices__device-logo">
+                    <img src="../assets/microcontroller.png" alt="microcontroller">
+                    <h6 class="has-text-right">Image: https://www.flaticon.com/</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <router-view></router-view>
         </div>
       </div>
-   </div>
+    </div>
   </section>
 </template>
 
 <script setup>
 
+import {onMounted, computed} from "vue";
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 
@@ -50,6 +69,12 @@ const logOut = () => {
   router.push('/login')
 }
 
+onMounted(() => {
+  store.dispatch('getRegisteredDevices')
+})
 
+const registeredDevices = computed(() => store.getters.getRegisteredDevices)
+
+const currentRoute = computed(() => router.currentRoute.value.name === 'dashboard')
 
 </script>

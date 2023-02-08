@@ -13,14 +13,20 @@ export default createStore({
         },
         isUserLoggedIn: false,
         measurementData: null,
-        loadedChart: false
+        loadedChart: false,
+        registeredDevices: [],
+        deviceData: null,
+        measurementStarted: false
     },
     getters: {
         getIsUserSignUp: state => state.isUserSignUp,
         getUser: state => state.user,
         getIsUserLoggedIn: state => state.isUserLoggedIn,
         getMeasurementData: state => state.measurementData,
-        getLoadedChart: state => state.loadedChart
+        getLoadedChart: state => state.loadedChart,
+        getRegisteredDevices: state => state.registeredDevices,
+        getDeviceData: state => state.deviceData,
+        getMeasurementStarted: state => state.measurementStarted
     },
     mutations: {
 
@@ -41,6 +47,15 @@ export default createStore({
         },
         setLoadedChart(state, payload) {
             state.loadedChart = payload.loadedChart
+        },
+        setRegisteredDevices(state, payload) {
+            state.registeredDevices = payload.registeredDevices
+        },
+        setDeviceData(state, payload) {
+            state.deviceData = payload.deviceData
+        },
+        setMeasurementStarted(state, payload) {
+            state.measurementStarted = payload.measurementStarted
         }
 
     },
@@ -125,6 +140,11 @@ export default createStore({
             })
         },
         async startMeasurement(context, payload) {
+
+            context.commit('setMeasurementStarted', {
+                measurementStarted: true
+            })
+
             await http.put(`/pawl/v1/api/command/${payload.deviceId}`, {
                 name: 'STARTED_MEASUREMENT',
                 identifier: payload.identifier
@@ -147,6 +167,26 @@ export default createStore({
                 loadedChart: true
             })
 
+            context.commit('setMeasurementStarted', {
+                measurementStarted: false
+            })
+
+        },
+        async getRegisteredDevices(context) {
+
+            let registeredDevices = await http.get(`/pawl/v1/api/command/`)
+
+            context.commit('setRegisteredDevices', {
+                registeredDevices: registeredDevices.data
+            })
+        },
+        async getDeviceData(context, payload) {
+
+            const responseData = await http.get(`/pawl/v1/api/data/${payload.deviceId}`)
+
+            await context.commit('setDeviceData', {
+                deviceData: responseData.data
+            })
         }
 
     },
