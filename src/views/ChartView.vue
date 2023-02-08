@@ -46,6 +46,7 @@
                 <h1 class="title is-1 has-text-centered has-text-white-bis">Getting data from device</h1>
                 <h2 class="subtitle is-3 has-text-centered has-text-white-bis">Please wait...</h2>
                 <progress class="progress is-large is-primary" max="100"></progress>
+                <button class="button is-danger is-large is-fullwidth" @click="stopMeasurement">Stop measurement</button>
               </div>
             </div>
           </div>
@@ -72,11 +73,9 @@
               </div>
             </div>
             <div class="buttons">
-              <button class="button is-primary is-rounded is-fullwidth" @click="startMeasurement">Start
+              <button class="button is-primary is-rounded is-fullwidth" :disabled="loaded" @click="startMeasurement">Start
               </button>
-              <button class="button is-danger is-rounded is-fullwidth" @click="stopMeasurement">Stop
-              </button>
-              <button class="button is-rounded is-fullwidth" @click="reloadChart">Reload Chart</button>
+              <button class="button is-rounded is-fullwidth" @click="reloadChart">Clear Chart</button>
             </div>
           </div>
         </div>
@@ -121,11 +120,14 @@ const isMeasurementStarted = computed(() => {
 });
 
 const stopMeasurement = () => {
-  console.log("stopMeasurement");
+  store.dispatch("stopMeasurement", {
+    deviceId: selectedDevice.value,
+    identifier: identifier.value,
+  })
 };
 
 const reloadChart = () => {
-  console.log("reload");
+  loaded.value = false;
 };
 
 const selectedDevice = computed(() => {
