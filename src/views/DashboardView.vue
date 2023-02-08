@@ -13,7 +13,7 @@
               General
             </p>
             <ul class="menu-list">
-              <li><a class="is-active">Dashboard</a></li>
+              <li><router-link class="is-active" to="/dashboard">Dashboard</router-link></li>
             </ul>
             <p class="menu-label">
               Administration
@@ -41,7 +41,9 @@
                     <p class="subtitle has-text-centered">{{ device.deviceId }}</p>
                   </div>
                   <div class="registered-devices__device-logo">
-                    <img src="../assets/microcontroller.png" alt="microcontroller">
+                    <router-link to="/dashboard/chart" @click="onSelectedDevice(device.deviceId)">
+                      <img src="../assets/microcontroller.png" alt="microcontroller">
+                    </router-link>
                     <h6 class="has-text-right">Image: https://www.flaticon.com/</h6>
                   </div>
                 </div>
@@ -76,5 +78,11 @@ onMounted(() => {
 const registeredDevices = computed(() => store.getters.getRegisteredDevices)
 
 const currentRoute = computed(() => router.currentRoute.value.name === 'dashboard')
+
+const onSelectedDevice = (deviceId) => {
+  store.dispatch('onSelectedDevice', {
+    selectedDevice: deviceId
+  })
+}
 
 </script>

@@ -54,7 +54,7 @@
               <div class="active-device__image">
                 <div class="active-device__description p-6">
                   <h2 class="has-text-centered">Potentiostat</h2>
-                  <h4 class="has-text-centered">Device ID: 123456789</h4>
+                  <h4 class="has-text-centered">Device ID: {{selectedDevice}}</h4>
                 </div>
                 <img src="../assets/microcontroller.png" alt="">
                 <h6 class="has-text-right">Image: https://www.flaticon.com/</h6>
@@ -88,13 +88,14 @@
 
 <script setup>
 import TheScatterComponent from "@/components/TheScatterComponent";
-import {ref, computed} from "vue";
+import {ref, computed, onMounted} from "vue";
 import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 
 const store = useStore();
+const router = useRouter();
 const loaded = ref(false);
 const identifier = ref("");
-const deviceId = ref("dev-001");
 
 const startMeasurement = async () => {
 
@@ -105,7 +106,7 @@ const startMeasurement = async () => {
     return;
   }
   await store.dispatch("startMeasurement", {
-    deviceId: deviceId.value,
+    deviceId: selectedDevice.value,
     identifier: identifier.value,
   });
 
@@ -126,5 +127,15 @@ const stopMeasurement = () => {
 const reloadChart = () => {
   console.log("reload");
 };
+
+const selectedDevice = computed(() => {
+  return store.getters.getSelectedDevice;
+});
+
+onMounted(() => {
+  if(store.getters.getSelectedDevice === null) {
+    router.push('/dashboard');
+  }
+});
 
 </script>

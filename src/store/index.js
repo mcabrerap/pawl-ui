@@ -16,7 +16,8 @@ export default createStore({
         loadedChart: false,
         registeredDevices: [],
         deviceData: null,
-        measurementStarted: false
+        measurementStarted: false,
+        selectedDevice: null
     },
     getters: {
         getIsUserSignUp: state => state.isUserSignUp,
@@ -26,7 +27,8 @@ export default createStore({
         getLoadedChart: state => state.loadedChart,
         getRegisteredDevices: state => state.registeredDevices,
         getDeviceData: state => state.deviceData,
-        getMeasurementStarted: state => state.measurementStarted
+        getMeasurementStarted: state => state.measurementStarted,
+        getSelectedDevice: state => state.selectedDevice
     },
     mutations: {
 
@@ -56,6 +58,9 @@ export default createStore({
         },
         setMeasurementStarted(state, payload) {
             state.measurementStarted = payload.measurementStarted
+        },
+        setSelectedDevice(state, payload) {
+            state.selectedDevice = payload.selectedDevice
         }
 
     },
@@ -186,6 +191,11 @@ export default createStore({
 
             await context.commit('setDeviceData', {
                 deviceData: responseData.data
+            })
+        },
+        onSelectedDevice(context, payload) {
+            context.commit('setSelectedDevice', {
+                selectedDevice: payload.selectedDevice
             })
         }
 
