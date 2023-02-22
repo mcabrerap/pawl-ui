@@ -18,7 +18,8 @@ export default createStore({
         deviceData: null,
         measurementStarted: false,
         selectedDevice: null,
-        stoppedEvent: false
+        stoppedEvent: false,
+        isSampleNameUsedForDevice: false
     },
     getters: {
         getIsUserSignUp: state => state.isUserSignUp,
@@ -30,7 +31,8 @@ export default createStore({
         getDeviceData: state => state.deviceData,
         getMeasurementStarted: state => state.measurementStarted,
         getSelectedDevice: state => state.selectedDevice,
-        getStoppedEvent: state => state.stoppedEvent
+        getStoppedEvent: state => state.stoppedEvent,
+        getIsSampleNameUsedForDevice: state => state.isSampleNameUsedForDevice
     },
     mutations: {
 
@@ -66,6 +68,9 @@ export default createStore({
         },
         setStoppedEvent(state, payload) {
             state.stoppedEvent = payload.stoppedEvent
+        },
+        setIsSampleNameUsedForDevice(state, payload) {
+            state.isSampleNameUsedForDevice = payload.isSampleNameUsedForDevice
         }
 
     },
@@ -219,9 +224,23 @@ export default createStore({
             context.commit('setStoppedEvent', {
                 stoppedEvent: true
             })
+
+            context.commit('setMeasurementStarted', {
+                measurementStarted: false
+            })
+        },
+        async isSampleNameUsedForDevice(context, payload) {
+
+            try {
+                const { data } = await http.get(`/pawl/v1/api/data?identifier=${payload.identifier}&deviceId=${payload.deviceId}`)
+
+                context.commit('setIsSampleNameUsedForDevice', {
+                    isSampleNameUsedForDevice: data.exists
+                })
+            } catch (error) {
+                console.log(error)
+            }
         }
-
-
 
     },
     modules: {}

@@ -46,7 +46,8 @@
                 <h1 class="title is-1 has-text-centered has-text-white-bis">Getting data from device</h1>
                 <h2 class="subtitle is-3 has-text-centered has-text-white-bis">Please wait...</h2>
                 <progress class="progress is-large is-primary" max="100"></progress>
-                <button class="button is-danger is-large is-fullwidth" @click="stopMeasurement">Stop measurement</button>
+                <button class="button is-danger is-large is-fullwidth" @click="stopMeasurement">Stop measurement
+                </button>
               </div>
             </div>
           </div>
@@ -55,7 +56,7 @@
               <div class="active-device__image">
                 <div class="active-device__description p-6">
                   <h2 class="has-text-centered">Potentiostat</h2>
-                  <h4 class="has-text-centered">Device ID: {{selectedDevice}}</h4>
+                  <h4 class="has-text-centered">Device ID: {{ selectedDevice }}</h4>
                 </div>
                 <img src="../assets/microcontroller.png" alt="">
                 <h6 class="has-text-right">Image: https://www.flaticon.com/</h6>
@@ -65,6 +66,10 @@
         </div>
         <div class="column is-one-fifth">
           <div class="chart-control">
+            <div class="notification is-danger is-light" v-if="validationErrorMessage">
+              <button class="delete" @click="acknowledgeError"></button>
+              <h1 class="subtitle has-text-centered">{{ validationErrorMessage }}</h1>
+            </div>
             <div class="field">
               <label class="label">Sample name</label>
               <div class="control">
@@ -73,7 +78,8 @@
               </div>
             </div>
             <div class="buttons">
-              <button class="button is-primary is-rounded is-fullwidth" :disabled="loaded" @click="startMeasurement">Start
+              <button class="button is-primary is-rounded is-fullwidth" :disabled="loaded" @click="startMeasurement">
+                Start
               </button>
               <button class="button is-rounded is-fullwidth" @click="reloadChart">Clear Chart</button>
             </div>
@@ -95,15 +101,29 @@ const store = useStore();
 const router = useRouter();
 const loaded = ref(false);
 const identifier = ref("");
+const validationErrorMessage = ref("");
+
 
 const startMeasurement = async () => {
 
   loaded.value = false;
+  validationErrorMessage.value = "";
 
   if (identifier.value === "") {
-    alert("Please enter a sample name");
+    validationErrorMessage.value = "Please enter a sample name";
     return;
   }
+
+  await store.dispatch("isSampleNameUsedForDevice", {
+    deviceId: selectedDevice.value,
+    identifier: identifier.value,
+  })
+
+  if (store.getters.getIsSampleNameUsedForDevice) {
+    validationErrorMessage.value = "Sample name already used for this device";
+    return;
+  }
+
   await store.dispatch("startMeasurement", {
     deviceId: selectedDevice.value,
     identifier: identifier.value,
@@ -128,6 +148,8 @@ const stopMeasurement = () => {
 
 const reloadChart = () => {
   loaded.value = false;
+  identifier.value = "";
+  validationErrorMessage.value = "";
 };
 
 const selectedDevice = computed(() => {
@@ -135,9 +157,13 @@ const selectedDevice = computed(() => {
 });
 
 onMounted(() => {
-  if(store.getters.getSelectedDevice === null) {
+  if (store.getters.getSelectedDevice === null) {
     router.push('/dashboard');
   }
 });
+
+const acknowledgeError = () => {
+  validationErrorMessage.value = "";
+};
 
 </script>
