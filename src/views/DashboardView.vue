@@ -21,6 +21,9 @@
             <ul class="menu-list">
               <li><a>Team Settings</a></li>
             </ul>
+            <ul class="menu-list">
+              <li><router-link class="" to="/dashboard/register-device">Register A New Device</router-link></li>
+            </ul>
             <p class="menu-label">
               Actions
             </p>

@@ -5,6 +5,7 @@ import NotFoundView from '../views/NotFoundView.vue'
 import SignUpSuccessView from '../views/SignUpSuccessView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChartView from '../views/ChartView.vue'
+import DevicesView from '../views/DevicesView.vue'
 
 const routes = [
     {
@@ -28,11 +29,19 @@ const routes = [
         path: '/dashboard',
         name: 'dashboard',
         component: DashboardView,
-        children: [{
-            path: 'chart',
-            name: 'chart',
-            component: ChartView
-        }],
+        children: [
+            {
+                path: 'chart',
+                name: 'chart',
+                component: ChartView
+            },
+            {
+                path: 'register-device',
+                name: 'register-device',
+                component: DevicesView
+
+            }
+        ],
         meta: {
             requiresAuth: true
         }

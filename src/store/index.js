@@ -1,5 +1,6 @@
 import {createStore} from 'vuex'
 import http from '../http/axios.http.js'
+import router from '../router/index.js'
 
 export default createStore({
     state: {
@@ -19,7 +20,8 @@ export default createStore({
         measurementStarted: false,
         selectedDevice: null,
         stoppedEvent: false,
-        isSampleNameUsedForDevice: false
+        isSampleNameUsedForDevice: false,
+        globalError: null
     },
     getters: {
         getIsUserSignUp: state => state.isUserSignUp,
@@ -32,7 +34,8 @@ export default createStore({
         getMeasurementStarted: state => state.measurementStarted,
         getSelectedDevice: state => state.selectedDevice,
         getStoppedEvent: state => state.stoppedEvent,
-        getIsSampleNameUsedForDevice: state => state.isSampleNameUsedForDevice
+        getIsSampleNameUsedForDevice: state => state.isSampleNameUsedForDevice,
+        getGlobalError: state => state.globalError
     },
     mutations: {
 
@@ -71,6 +74,9 @@ export default createStore({
         },
         setIsSampleNameUsedForDevice(state, payload) {
             state.isSampleNameUsedForDevice = payload.isSampleNameUsedForDevice
+        },
+        setGlobalError(state, payload) {
+            state.globalError = payload.globalError
         }
 
     },
@@ -240,6 +246,50 @@ export default createStore({
             } catch (error) {
                 console.log(error)
             }
+        },
+        async registerDevice(context, payload) {
+
+            try {
+                if (payload.deviceId === '') {
+                    context.commit('setGlobalError', {
+                        globalError: 'Device ID is required'
+                    })
+                    return
+                }
+
+                await http.post(`/pawl/v1/api/command`, {
+                    deviceId: payload.deviceId,
+                    identifier: payload.deviceId
+                }, {
+                    headers: {
+                        'Authorization': 'Bearer ' + context.getters.getUser.accessToken
+                    }
+                })
+            } catch (error) {
+                if (error.response.status === 401) {
+                    await context.dispatch('logOut')
+                    await router.push('/login')
+                }
+
+                if (error.response.data.code === 11000) {
+                    context.commit('setGlobalError', {
+                        globalError: 'Device already registered'
+                    })
+                }
+            }
+
+            await context.dispatch('getRegisteredDevices')
+        },
+        async deleteDevice(context, _id) {
+
+            await http.delete(`/pawl/v1/api/command/${_id}`)
+            await context.dispatch('getRegisteredDevices')
+
+        },
+        async acknowledgeGlobalError(context) {
+            context.commit('setGlobalError', {
+                globalError: ''
+            })
         }
 
     },
