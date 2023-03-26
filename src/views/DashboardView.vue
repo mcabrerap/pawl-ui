@@ -13,16 +13,16 @@
               General
             </p>
             <ul class="menu-list">
-              <li><router-link class="is-active" to="/dashboard">Dashboard</router-link></li>
+              <li><router-link :class="{'is-active': routeName === 'dashboard' || routeName === 'chart'}" to="/dashboard">Dashboard</router-link></li>
             </ul>
             <p class="menu-label">
               Administration
             </p>
             <ul class="menu-list">
-              <li><a>Team Settings</a></li>
+              <li><router-link :class="{'is-active': routeName === 'team-settings'}" to="/dashboard/team-settings">Team Settings</router-link></li>
             </ul>
             <ul class="menu-list">
-              <li><router-link class="" to="/dashboard/register-device">Register A New Device</router-link></li>
+              <li><router-link :class="{'is-active': routeName === 'register-device'}" to="/dashboard/register-device">Register A New Device</router-link></li>
             </ul>
             <p class="menu-label">
               Actions
@@ -81,6 +81,8 @@ onMounted(() => {
 const registeredDevices = computed(() => store.getters.getRegisteredDevices)
 
 const currentRoute = computed(() => router.currentRoute.value.name === 'dashboard')
+
+const routeName = computed(() => router.currentRoute.value.name)
 
 const onSelectedDevice = (deviceId) => {
   store.dispatch('onSelectedDevice', {

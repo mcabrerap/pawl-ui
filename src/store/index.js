@@ -21,7 +21,8 @@ export default createStore({
         selectedDevice: null,
         stoppedEvent: false,
         isSampleNameUsedForDevice: false,
-        globalError: null
+        globalError: null,
+        users: [],
     },
     getters: {
         getIsUserSignUp: state => state.isUserSignUp,
@@ -35,7 +36,9 @@ export default createStore({
         getSelectedDevice: state => state.selectedDevice,
         getStoppedEvent: state => state.stoppedEvent,
         getIsSampleNameUsedForDevice: state => state.isSampleNameUsedForDevice,
-        getGlobalError: state => state.globalError
+        getGlobalError: state => state.globalError,
+        getUsers: state => state.users,
+
     },
     mutations: {
 
@@ -77,6 +80,9 @@ export default createStore({
         },
         setGlobalError(state, payload) {
             state.globalError = payload.globalError
+        },
+        setUsers(state, payload) {
+            state.users = payload.users
         }
 
     },
@@ -290,6 +296,25 @@ export default createStore({
             context.commit('setGlobalError', {
                 globalError: ''
             })
+        },
+        async getUsers(context) {
+
+            const users = await http.get('/pawl/v1/api/user')
+
+            context.commit('setUsers', {
+                users: users.data
+            })
+        },
+        async deleteUser(context, _id) {
+            await http.delete(`/pawl/v1/api/user/${_id}`)
+            await context.dispatch('getUsers')
+        },
+        async verifyUser(context, payload) {
+
+            await http.put(`/pawl/v1/api/user/verify/${payload.id}`, {
+                verified: payload.verified
+            })
+            await context.dispatch('getUsers')
         }
 
     },

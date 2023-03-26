@@ -6,6 +6,7 @@ import SignUpSuccessView from '../views/SignUpSuccessView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ChartView from '../views/ChartView.vue'
 import DevicesView from '../views/DevicesView.vue'
+import TeamSettingsView from '../views/TeamSettingsView.vue'
 
 const routes = [
     {
@@ -39,7 +40,11 @@ const routes = [
                 path: 'register-device',
                 name: 'register-device',
                 component: DevicesView
-
+            },
+            {
+                path: 'team-settings',
+                name: 'team-settings',
+                component: TeamSettingsView
             }
         ],
         meta: {
