@@ -39,14 +39,25 @@
       <div class="columns">
         <div class="column">
           <the-scatter-component v-if="loaded"></the-scatter-component>
-          <div class="modal" :class="{'is-active': isMeasurementStarted}">
+          <div class="modal" :class="{ 'is-active': isMeasurementStarted }">
             <div class="modal-background"></div>
             <div class="modal-content">
               <div>
-                <h1 class="title is-1 has-text-centered has-text-white-bis">Getting data from device</h1>
-                <h2 class="subtitle is-3 has-text-centered has-text-white-bis">Please wait...</h2>
-                <progress class="progress is-large is-primary" max="100"></progress>
-                <button class="button is-danger is-large is-fullwidth" @click="stopMeasurement">Stop measurement
+                <h1 class="title is-1 has-text-centered has-text-white-bis">
+                  Getting data from device
+                </h1>
+                <h2 class="subtitle is-3 has-text-centered has-text-white-bis">
+                  Please wait...
+                </h2>
+                <progress
+                  class="progress is-large is-primary"
+                  max="100"
+                ></progress>
+                <button
+                  class="button is-danger is-large is-fullwidth"
+                  @click="stopMeasurement"
+                >
+                  Stop measurement
                 </button>
               </div>
             </div>
@@ -56,9 +67,11 @@
               <div class="active-device__image">
                 <div class="active-device__description p-6">
                   <h2 class="has-text-centered">Potentiostat</h2>
-                  <h4 class="has-text-centered">Device ID: {{ selectedDevice }}</h4>
+                  <h4 class="has-text-centered">
+                    Device ID: {{ selectedDevice }}
+                  </h4>
                 </div>
-                <img src="../assets/microcontroller.png" alt="">
+                <img src="../assets/microcontroller.png" alt="" />
                 <h6 class="has-text-right">Image: https://www.flaticon.com/</h6>
               </div>
             </div>
@@ -66,36 +79,62 @@
         </div>
         <div class="column is-one-fifth">
           <div class="chart-control">
-            <div class="notification is-danger is-light" v-if="validationErrorMessage">
+            <div
+              class="notification is-danger is-light"
+              v-if="validationErrorMessage"
+            >
               <button class="delete" @click="acknowledgeError"></button>
-              <h1 class="subtitle has-text-centered">{{ validationErrorMessage }}</h1>
+              <h1 class="subtitle has-text-centered">
+                {{ validationErrorMessage }}
+              </h1>
             </div>
             <div class="field">
               <label class="label">Sample name</label>
               <div class="control">
-                <input class="input is-rounded is-primary" type="text" placeholder="enter sample name"
-                       v-model.trim="identifier">
+                <input
+                  class="input is-rounded is-primary"
+                  type="text"
+                  placeholder="Enter sample name"
+                  v-model.trim="identifier"
+                />
               </div>
             </div>
             <div class="buttons">
-              <button class="button is-primary is-rounded is-fullwidth" :disabled="loaded" @click="startMeasurement">
+              <button
+                class="button is-primary is-rounded is-fullwidth"
+                :disabled="loaded"
+                @click="startMeasurement"
+              >
                 Start
               </button>
-              <button class="button is-rounded is-fullwidth" @click="reloadChart">Clear Chart</button>
+              <button
+                class="button is-rounded is-fullwidth"
+                @click="reloadChart"
+              >
+                Clear Chart
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
+  <section>
+    <div class="chart-logo">
+      <img
+        src="https://raw.githubusercontent.com/Biomicrosystems/Documentation/main/Logos/BiomicrosystemsLogo.png"
+         class="chart-logo--image" alt="Logo"
+      />
+    </div>
   </section>
 </template>
 
 <script setup>
 import TheScatterComponent from "@/components/TheScatterComponent";
-import {ref, computed, onMounted} from "vue";
-import {useStore} from "vuex";
-import {useRouter} from "vue-router";
+import { ref, computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 const store = useStore();
 const router = useRouter();
@@ -103,9 +142,7 @@ const loaded = ref(false);
 const identifier = ref("");
 const validationErrorMessage = ref("");
 
-
 const startMeasurement = async () => {
-
   loaded.value = false;
   validationErrorMessage.value = "";
 
@@ -117,7 +154,7 @@ const startMeasurement = async () => {
   await store.dispatch("isSampleNameUsedForDevice", {
     deviceId: selectedDevice.value,
     identifier: identifier.value,
-  })
+  });
 
   if (store.getters.getIsSampleNameUsedForDevice) {
     validationErrorMessage.value = "Sample name already used for this device";
@@ -132,7 +169,6 @@ const startMeasurement = async () => {
   if (store.getters.getLoadedChart) {
     loaded.value = true;
   }
-
 };
 
 const isMeasurementStarted = computed(() => {
@@ -143,7 +179,7 @@ const stopMeasurement = () => {
   store.dispatch("stopMeasurement", {
     deviceId: selectedDevice.value,
     identifier: identifier.value,
-  })
+  });
 };
 
 const reloadChart = () => {
@@ -158,12 +194,11 @@ const selectedDevice = computed(() => {
 
 onMounted(() => {
   if (store.getters.getSelectedDevice === null) {
-    router.push('/dashboard');
+    router.push("/dashboard");
   }
 });
 
 const acknowledgeError = () => {
   validationErrorMessage.value = "";
 };
-
 </script>
