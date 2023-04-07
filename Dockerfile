@@ -17,8 +17,14 @@ COPY . .
 # Compila el proyecto
 RUN npm run build
 
-# Expone el puerto 8080
-EXPOSE 8080
+# Use an official Nginx runtime as a parent image
+FROM nginx:1.21-alpine
 
-# Inicia la aplicación
-CMD ["npm", "run", "serve"]
+# Copy the build output from the previous stage to the Nginx document root
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 80 for incoming traffic
+EXPOSE 80
+
+# Start the Nginx server
+CMD ["nginx", "-g", "daemon off;"]
