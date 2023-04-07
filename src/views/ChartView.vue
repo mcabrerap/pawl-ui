@@ -5,31 +5,61 @@
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Start Point (V)</p>
-            <p class="title">0,000</p>
+            <input
+              class="input_"
+              id="Start_Point"
+              type="number"
+              value="0.000"
+              step="0.001"
+            />
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">First Vertex (V)</p>
-            <p class="title">0,700</p>
+            <input
+              class="input_"
+              id="First_Vertex"
+              type="number"
+              value="0.700"
+              step="0.001"
+            />
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Second Vertex (V)</p>
-            <p class="title">-0,700</p>
+            <input
+              class="input_"
+              id="Second_Vertex"
+              type="number"
+              value="-0.700"
+              step="0.001"
+            />
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Zero Crosses</p>
-            <p class="title">4</p>
+            <input
+              class="input_"
+              id="Zero_Crosses"
+              type="number"
+              value="4"
+              step="1"
+            />
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Scan Rate (V/S)</p>
-            <p class="title">0,050</p>
+            <input
+              class="input_"
+              id="Scan_Rate"
+              type="number"
+              value="0.050"
+              step="0.001"
+            />
           </div>
         </div>
       </nav>
@@ -124,7 +154,8 @@
     <div class="chart-logo">
       <img
         src="https://raw.githubusercontent.com/Biomicrosystems/Documentation/main/Logos/BiomicrosystemsLogo.png"
-         class="chart-logo--image" alt="Logo"
+        class="chart-logo--image"
+        alt="Logo"
       />
     </div>
   </section>
